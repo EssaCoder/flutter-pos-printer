@@ -1793,17 +1793,18 @@ class PrinterCommander {
           ),
         );
         break;
+      case PrinterType.network:
+        await printerManager.connect(
+          type: PrinterType.network,
+          model: TcpPrinterInput(
+            ipAddress: bluetoothPrinter.address!,
+            port: int.tryParse(bluetoothPrinter.port??'')??9100,
+          ),
+        );
+        break;
       default:
         break;
     }
-
-    if ((bluetoothPrinter.typePrinter == PrinterType.bluetooth &&
-            Platform.isAndroid) ||
-        (bluetoothPrinter.typePrinter == PrinterType.usb &&
-            Platform.isWindows)) {
-      printerManager.send(type: bluetoothPrinter.typePrinter, bytes: bytes);
-    } else {
-      throw UnsupportedError("Only available on Android device");
-    }
+    printerManager.send(type: bluetoothPrinter.typePrinter, bytes: bytes);
   }
 }
